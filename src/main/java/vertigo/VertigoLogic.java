@@ -12,10 +12,14 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EquipmentSlot;
+
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -25,7 +29,17 @@ public class VertigoLogic {
 
     private int getEPF_Falling(PlayerEntity player){
         int EPF = 0;
-        for (int i =0; i < player.inventory.armor.size(); i++) {
+        EnchantmentHelper.getLevel(Enchantments.PROTECTION, player.getEquippedStack(EquipmentSlot.CHEST));
+
+        for (ItemStack armor : player.inventory.armor){
+            EPF += 2 * EnchantmentHelper.getLevel(Enchantments.PROTECTION, armor);
+            EPF += 3 * EnchantmentHelper.getLevel(Enchantments.FEATHER_FALLING, armor);
+        }
+
+        if (EPF > 20) {EPF = 20;}
+        //int ffLvl = EnchantmentHelper.getLevel(Enchantments.FEATHER_FALLING, player.getEquippedStack(EquipmentSlot.FEET));
+
+        /*for (int i =0; i < player.inventory.armor.size(); i++) {
             for (int j = 0; j < player.inventory.armor.get(i).getEnchantments().size(); j++) {
                 //System.out.println(player.inventory.armor.get(i).getEnchantments().get(j).toString());
                 Object k = new JsonParser().parse(player.inventory.armor.get(i).getEnchantments().get(j).toString());
@@ -40,7 +54,7 @@ public class VertigoLogic {
                     EPF += lvl * 2;
                 }
             }
-        }
+        }*/
         return EPF;
     }
 
@@ -97,6 +111,7 @@ public class VertigoLogic {
             //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), true);
             BlockPos loc = player.getBlockPos();
             //System.out.println(loc.getY());
+
 
             int y = loc.getY();
             for (int i = 1; i <= 3; i++){

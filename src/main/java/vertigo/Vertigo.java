@@ -56,16 +56,6 @@ public class Vertigo implements ModInitializer {
             }
         });
 
-        MinecraftClient mc = MinecraftClient.getInstance();
-
-
-        while (mc.player != null) {
-            System.out.println(mc.player.fallDistance);
-            System.out.println("meh");
-        }
-
-
-
     }
 
 }
