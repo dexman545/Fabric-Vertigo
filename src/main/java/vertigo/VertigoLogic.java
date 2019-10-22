@@ -11,6 +11,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -67,7 +69,7 @@ public class VertigoLogic {
 
     private boolean isPlayerInDanger(PlayerEntity player){
         //offset actual health to give player tim to save themselves
-        double nDmg = (0.95 * player.getHealth()) - getDamageAfterArmour(player);
+        double nDmg = (0.6 * player.getHealth()) - getDamageAfterArmour(player);
         if (nDmg <= 0.0) {return true;}
 
         return false;
@@ -89,13 +91,18 @@ public class VertigoLogic {
 
             player.pitch = 90f;
 
+            SwitchLogic sl = new SwitchLogic();
+            sl.changeSlot(sl.rescueItems(player), player);
+
             //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), true);
             BlockPos loc = player.getBlockPos();
             //System.out.println(loc.getY());
+
             int y = loc.getY();
             for (int i = 1; i <= 3; i++){
-                if (!player.world.getBlockState(loc.offset(Direction.DOWN, i)).isAir() ||
-                        player.world.getBlockState(loc.offset(Direction.DOWN, i)) != Blocks.WATER.getDefaultState()){
+                if (!player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)).isAir() ||
+                        player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)) != Blocks.WATER.getDefaultState()){
+                    clickSpam(player);
                     ClientTickCallback.EVENT.register(e ->
                     {
                         clickSpam(player);
