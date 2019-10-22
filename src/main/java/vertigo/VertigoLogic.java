@@ -29,7 +29,7 @@ public class VertigoLogic {
 
     private int getEPF_Falling(PlayerEntity player){
         int EPF = 0;
-        EnchantmentHelper.getLevel(Enchantments.PROTECTION, player.getEquippedStack(EquipmentSlot.CHEST));
+        //EnchantmentHelper.getLevel(Enchantments.PROTECTION, player.getEquippedStack(EquipmentSlot.CHEST));
 
         for (ItemStack armor : player.inventory.armor){
             EPF += 2 * EnchantmentHelper.getLevel(Enchantments.PROTECTION, armor);
