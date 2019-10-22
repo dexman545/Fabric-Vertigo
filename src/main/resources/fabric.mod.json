@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "vertigo",
+  "version": "${version}",
+
+  "name": "Vertigo",
+  "description": "Life saving mod for falling.",
+  "authors": [
+    "Deximus-Maximus"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/vertigo/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "vertigo.Vertigo"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
