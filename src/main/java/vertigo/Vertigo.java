@@ -30,8 +30,6 @@ public class Vertigo implements ModInitializer {
     public void onInitialize() {
         System.out.println("Vertigo Loaded");
 
-        //Keybindings
-
         //vertigo toggle
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier("vertigo"),
@@ -39,13 +37,13 @@ public class Vertigo implements ModInitializer {
                 GLFW.GLFW_KEY_F,
                 "Vertigo"
         ).build();
-
+        MinecraftClient mc = MinecraftClient.getInstance();
+        VertigoLogic vl = new VertigoLogic();
         KeyBindingRegistry.INSTANCE.register(keyBinding);
         ClientTickCallback.EVENT.register(e ->
         {
             if(keyBinding.isPressed()) {
-                MinecraftClient mc = MinecraftClient.getInstance();
-                VertigoLogic vl = new VertigoLogic();
+
                 vl.attemptLifeSave(e.player);
 
                 //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), true);
