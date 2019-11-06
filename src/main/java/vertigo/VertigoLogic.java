@@ -1,30 +1,20 @@
 package vertigo;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import net.fabricmc.fabric.api.event.client.ClientTickCallback;
-
 import net.minecraft.block.Blocks;
-
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
-
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 
 public class VertigoLogic {
+    private MinecraftClient mc = MinecraftClient.getInstance();
     //private final SwitchLogic sl;
     //private float damageReduction = 0;
 
@@ -78,15 +68,25 @@ public class VertigoLogic {
     private boolean click = true;
     public void clickSpam(PlayerEntity player){
         //if (isPlayerInDanger(player)) {
-            KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), click);
-            //click = !click;
-            //System.out.println(click);
-            KeyBinding.updatePressedStates();
-            KeyBinding.onKeyPressed(InputUtil.Type.MOUSE.createFromCode(1));
+            //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), click);
+        //click = !click;
+        //System.out.println(click);
+
+        //KeyBinding.onKeyPressed(InputUtil.Type.MOUSE.createFromCode(1));
+
+        KeyBinding.onKeyPressed(mc.options.keyUse.getDefaultKeyCode());
+        KeyBinding.updatePressedStates();
+
+        mc.options.keyUse.setPressed(click);
+
+
+
+            //KeyBinding.unpressAll();
         //}
     }
 
     public void attemptLifeSave(PlayerEntity player) {
+        //clickSpam(player);
         if (isPlayerInDanger(player)){
 
             player.pitch = 90f;
@@ -94,27 +94,26 @@ public class VertigoLogic {
             SwitchLogic sl = new SwitchLogic();
             sl.changeSlot(sl.rescueItems(player), player);
 
-            //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), true);
             BlockPos loc = player.getBlockPos();
             //System.out.println(loc.getY());
-
-
             int y = loc.getY();
+            boolean blockBeneath = false;
             for (int i = 1; i <= 3; i++){
-                if (!player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)).isAir() ||
+                if (!player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)).isAir() &&
                         player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)) != Blocks.WATER.getDefaultState()){
-                    clickSpam(player);
-                    /*ClientTickCallback.EVENT.register(e ->
-                    {
-                        clickSpam(player);
-                    });*/
-                    //KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), true);
-                    System.out.println("meh");
+                    //System.out.println(player.world.getBlockState(loc.offset(Direction.DOWN).add(0, -i, 0)));
+                    blockBeneath = true;
+                    break;
                 }
             }
+            if (blockBeneath){
+                clickSpam(player);
+                player.swingHand(player.getActiveHand());
+                System.out.println("meh");
+            }
 
-            System.out.println("Life in Danger!");
-        } else {KeyBinding.setKeyPressed(InputUtil.Type.MOUSE.createFromCode(1), false);}
+            //System.out.println("Life in Danger!");
+        } else {mc.options.keyUse.setPressed(false);}
     }
 
 
