@@ -25,7 +25,7 @@ public class Vertigo implements ModInitializer {
         keyBinding = FabricKeyBinding.Builder.create(
                 new Identifier("vertigo"),
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F,
+                GLFW.GLFW_KEY_V,
                 "Vertigo"
         ).build();
         MinecraftClient mc = MinecraftClient.getInstance();
